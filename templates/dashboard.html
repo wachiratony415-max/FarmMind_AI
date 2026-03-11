@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FarmMind AI 🌱</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='/chat_style.css') }}">
+</head>
+<body>
+<div class="chat-container">
+    <header class="chat-header">
+        <h2>FarmMind AI 🌱</h2>
+        <p>Your smart farming assistant</p>
+    </header>
+
+    <div id="chat-box" class="chat-box"></div>
+
+    <div class="quick-actions">
+        <button onclick="sendQuick('Hello!')">Hello</button>
+        <button onclick="sendQuick('Bye!')">Bye</button>
+        <button onclick="sendQuick('Tell me about FarmMind')">About FarmMind</button>
+    </div>
+
+    <div id="suggestions" class="suggestions"></div>
+
+    <form id="chat-form" class="chat-form">
+        <input type="text" id="user-input" placeholder="Ask me about crops, livestock, tools..." autocomplete="off" required>
+        <button type="submit">Send</button>
+    </form>
+</div>
+
+<script>
+const chatBox = document.getElementById('chat-box');
+const chatForm = document.getElementById('chat-form');
+const userInput = document.getElementById('user-input');
+const suggestionsDiv = document.getElementById('suggestions');
+
+function addMessage(message, sender, category=null, points=true){
+    const msgDiv = document.createElement('div');
+    msgDiv.classList.add('message', sender);
+    if(category) msgDiv.classList.add(category);
+
+    if(points){
+        const lines = message.split('\n').map(line => '• ' + line.trim());
+        msgDiv.innerHTML = '<div class="points">' + lines.join('<br>') + '</div>';
+    } else {
+        msgDiv.innerHTML = message.replace(/\n/g,'<br>');
+    }
+
+    chatBox.appendChild(msgDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function addTyping(){
+    const typingDiv = document.createElement('div');
+    typingDiv.classList.add('message','ai','typing');
+    typingDiv.innerHTML = "FarmMind AI is thinking...";
+    chatBox.appendChild(typingDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+    return typingDiv;
+}
+
+function showSuggestions(options){
+    suggestionsDiv.innerHTML = '';
+    options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.textContent = opt;
+        btn.addEventListener('click', ()=>{
+            userInput.value = opt;
+            chatForm.dispatchEvent(new Event('submit'));
+        });
+        suggestionsDiv.appendChild(btn);
+    });
+}
+
+function sendQuick(text){
+    userInput.value = text;
+    chatForm.dispatchEvent(new Event('submit'));
+}
+
+chatForm.addEventListener('submit', async e=>{
+    e.preventDefault();
+    const text = userInput.value.trim();
+    if(!text) return;
+    addMessage(text,'user');
+    userInput.value = '';
+    const typingDiv = addTyping();
+
+    const response = await fetch('/dashboard',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({message:text})
+    }).then(res=>res.json());
+
+    typingDiv.remove();
+
+    // Categorize by keywords
+    let category = null;
+    if(/maize|rice|beans|tomatoes|potatoes|sukuma wiki|onions/i.test(text)) category='crop';
+    if(/cattle|goats|sheep|poultry/i.test(text)) category='livestock';
+    if(/hoe|plough|harrow|irrigation|fertilizer/i.test(text)) category='tools';
+
+    addMessage(response.reply,'ai',category,true);
+
+    // Show suggested follow-up questions if AI provides them
+    if(response.suggestions){
+        showSuggestions(response.suggestions);
+    } else {
+        // default suggestions if AI doesn't send any
+        showSuggestions([
+            "Tell me about maize",
+            "What are common livestock problems?",
+            "Best tools for irrigation"
+        ]);
+    }
+});
+</script>
+</body>
+</html>

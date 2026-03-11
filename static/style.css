@@ -1,0 +1,154 @@
+/* =========================================
+   AUTH STYLE: Login & Register
+   Dark theme + animations
+   ========================================= */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #1f1f1f, #111111);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    color: #eee;
+}
+
+.auth-container {
+    background-color: #222;
+    padding: 40px 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    animation: fadeIn 1s ease-in-out;
+}
+
+.auth-container h2 {
+    margin-bottom: 25px;
+    font-size: 28px;
+    color: #7be495;
+    letter-spacing: 1px;
+    animation: slideDown 0.8s ease-out;
+}
+
+.auth-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.auth-container input {
+    padding: 14px 18px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    background: #333;
+    color: #eee;
+    transition: all 0.3s ease;
+}
+
+.auth-container input:focus {
+    box-shadow: 0 0 10px #7be495;
+    background-color: #2a2a2a;
+}
+
+.auth-container button {
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    background: #7be495;
+    color: #111;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+}
+
+.auth-container button:hover {
+    background: #5ed17d;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.5);
+}
+
+.link {
+    margin-top: 20px;
+}
+
+.link a {
+    text-decoration: none;
+    color: #7be495;
+    font-size: 14px;
+    transition: color 0.3s ease;
+}
+
+.link a:hover {
+    color: #5ed17d;
+    text-decoration: underline;
+}
+
+/* Error message styling */
+.error {
+    background: #ff4b5c;
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    animation: shake 0.5s;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    0% { opacity: 0; transform: scale(0.95); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slideDown {
+    0% { opacity: 0; transform: translateY(-30px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+}
+
+/* Cool page switch animation */
+body.registering .auth-container {
+    animation: slideRight 0.6s ease forwards;
+}
+
+body.loggingin .auth-container {
+    animation: slideLeft 0.6s ease forwards;
+}
+
+@keyframes slideRight {
+    0% { transform: translateX(-50%) scale(0.95); opacity: 0; }
+    100% { transform: translateX(0%) scale(1); opacity: 1; }
+}
+
+@keyframes slideLeft {
+    0% { transform: translateX(50%) scale(0.95); opacity: 0; }
+    100% { transform: translateX(0%) scale(1); opacity: 1; }
+}
+
+/* Responsive for mobile */
+@media (max-width: 500px) {
+    .auth-container {
+        padding: 30px 20px;
+    }
+
+    .auth-container h2 {
+        font-size: 24px;
+    }
+
+    .auth-container input, .auth-container button {
+        font-size: 14px;
+        padding: 12px 15px;
+    }
+}

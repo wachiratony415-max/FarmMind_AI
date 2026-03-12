@@ -1,5 +1,6 @@
 flask
-flask-SQALchemy
+flask_sqlalchemy
 werkzeug
 gunicorn
+
 

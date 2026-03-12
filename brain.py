@@ -145,7 +145,7 @@ class FarmMind:
             return (
                 "About FarmMind\n"
                 "──────────────\n"
-                "FarmMind is an agricultural AI assistant designed to help "
+                "FarmMind is an agricultural AI assistant designed a developer **tonie**to help "
                 "farmers identify crop diseases, pests, and farming problems.\n\n"
                 "It uses a large farming knowledge base to provide useful "
                 "agriculture advice."
@@ -221,3 +221,4 @@ def farmmind_respond(question):
     brain = FarmMind(agriculture_knowledge)
 
     return brain.answer(question)
+

@@ -1,4 +1,5 @@
-Flask
-Flask-SQALchemy
+flask
+flask-SQALchemy
 werkzeug
 gunicorn
+
